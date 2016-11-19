@@ -12,7 +12,6 @@ var LatestSchema = new Schema({
     dtime: String,
 });
 
-var LatestDAO = function(){};
 var Latest = mongodb.mongoose.model('Latest', LatestSchema);
 
 LatestDAO.prototype =  {
