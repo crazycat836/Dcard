@@ -7,7 +7,7 @@ var API = {
     'article': 'https://www.dcard.tw/_api/posts/',
     'hot': 'https://www.dcard.tw/_api/posts?popular=true',
     'comments': 'https://www.dcard.tw/_api/posts',
-    'allHot': 'https://www.dcard.tw/_api/posts?popular=true&before=',
+    'articleList': 'https://www.dcard.tw/_api/posts?popular=true&before=',
     'hotcmt': 'https://www.dcard.tw/_api/posts/'
 }
 
@@ -96,10 +96,10 @@ var data = {
         });
     },
     // 所有熱門文章
-    getAllHot: function(articleId) {
+    getArticleList: function(articleId) {
         return new Promise(function(resolve, reject) {
             if (articleId) {
-                var url = API.allHot + articleId;
+                var url = API.articleList + articleId;
                 request({
                     method: 'GET',
                     uri: url,
