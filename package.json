@@ -37,6 +37,7 @@
     "babel-runtime": "^6.18.0",
     "body-parser": "^1.15.2",
     "cheerio": "^0.22.0",
+    "cron": "^1.1.1",
     "es6-promise": "^4.0.5",
     "express": "^4.14.0",
     "file-stream-rotator": "0.0.7",
