@@ -6,13 +6,17 @@ const dcardAPI = require('../api/api');
 const Spider = require('./spider');
 const DateCalc = require('./date');
 
+/*
+Cron Ranges
 
-// ============== BAE node-log ==============
-if(CONFIG.log.openBae){
-    const logger = console;
-}else {
-    const logger = require('log4js').getLogger('cheese');
-}
+Seconds: 0-59
+Minutes: 0-59
+Hours: 0-23
+Day of Month: 1-31
+Months: 0-11
+Day of Week: 0-6
+
+ */
 
 const Task = {
     fire: function(){
@@ -26,7 +30,7 @@ const Task = {
             Spider.latest();
         }, function(){
             logger.info('hourly cron-job over')
-        }, true, 'Asia/Shanghai');
+        }, true, 'Asia/Taipei');
     },
     // 每天23:30 爬取当天的数据
     daily: function(){
@@ -35,7 +39,7 @@ const Task = {
             Spider.day(date);
         }, function(){
             logger.info('daily cron-job over @date:' + new Date())
-        }, true, 'Asia/Shanghai');
+        }, true, 'Asia/Taipei');
     },
     
     // 每周三、日 00:30 更新前7天的评论点赞数 
@@ -47,7 +51,7 @@ const Task = {
             Spider.updateCmtCount(start, end);
         }, function(){
             logger.info('weekly cron-job over ')
-        }, true, 'Asia/Shanghai');
+        }, true, 'Asia/Taipei');
     }
 }
 
