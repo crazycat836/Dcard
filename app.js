@@ -44,11 +44,6 @@ if(CONFIG.spider.openTask) {
     Job.fire();
 }
 
-// 生成统计数据
-// const statistic = require('./statistic')
-// 参数为需要统计的月份数组
-// statistic.start(['201609', '201608'])
-
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -94,36 +89,6 @@ app.use(function(err, req, res, next) {
         error: {}
     });
 });
-
-
-// ============== log4js init ==============
-if(CONFIG.log.isOpenningNode){
-    var log4js = require('log4js');
-    log4js.loadAppender('file');
-    log4js.configure({
-        appenders: [
-            { type: 'console' },
-            { type: 'file', filename: './log/cheese.log', category: 'cheese' }
-        ]
-    });
-}
-// ============== log4js init ==============
-
-
-// ============== HTTP log ==============
-if(CONFIG.log.isOpenningHTTP){
-    var logDirectory = path.join(__dirname, 'log');
-    fs.existsSync(logDirectory) || fs.mkdirSync(logDirectory)
-    var accessLogStream = FileStreamRotator.getStream({
-        date_format: 'YYYYMMDD',
-        filename: path.join(logDirectory, 'access-%DATE%.log'),
-        frequency: 'daily',
-        verbose: false
-    });
-    app.use(morgan('combined', { stream: accessLogStream }));
-}
-// ============== HTTP log ==============
-var debug = require('debug')('my-application');
 
 app.set('port', process.env.PORT || 5502);
 
