@@ -1,12 +1,12 @@
-// 文章點讚評論數
+// article likeCount & commentCount
 var mongodb = require('../connect');
 var Schema = mongodb.mongoose.Schema;
 var Promise = require('es6-promise').Promise;
 
 var CmtCountSchema = new Schema({
     aid: { type: String, index: true }, // 單篇文章用
-    comments: Number,
-    popularity: Number,
+    commentCount: Number,
+    likeCount: Number,
     dtime: { type: String, index: true }, // 歷史紀錄用
     dmonth: { type: String, index: true }, // 統計用
     dyear: String
@@ -43,8 +43,8 @@ CmtCountDAO.prototype = {
                     for (var i = 0, len = data.length; i < len; i++) {
                         var d = {
                             aid: data[i].aid,
-                            comments: data[i].comments,
-                            popularity: data[i].popularity,
+                            commentCount: data[i].commentCount,
+                            likeCount: data[i].likeCount,
                             dtime: data[i].dtime,
                             dmonth: data[i].dmonth,
                             dyear: data[i].dyear

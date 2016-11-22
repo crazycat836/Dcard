@@ -1,4 +1,4 @@
-// 文章詳情
+//  article detail
 var mongodb = require('../connect');
 var Schema = mongodb.mongoose.Schema;
 var Promise = require('es6-promise').Promise;
@@ -6,7 +6,7 @@ var Promise = require('es6-promise').Promise;
 var ArticleSchema = new Schema({
     id: { type: String, index: true },
     title: String,
-    body: String,
+    content: String,
     gender: String,
     school: String,
     department: String,
@@ -48,7 +48,7 @@ ArticleDAO.prototype = {
                         d = {
                             id: data[i].id,
                             title: data[i].title,
-                            body: data[i].body,
+                            content: data[i].content,
                             gender: data[i].gender,
                             school: data[i].school,
                             department: data[i].department,

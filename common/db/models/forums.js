@@ -1,10 +1,10 @@
-// 看板列表model
+// forum list
 var mongodb = require('../connect');
 var Schema = mongodb.mongoose.Schema;
 var Promise = require('es6-promise').Promise;
 
 var ForumsSchema = new Schema({
-    forumsid: { type: String, index: true },
+    forumsAlias: { type: String, index: true },
     name: String,
     description: String,
     subscriptionCount: String

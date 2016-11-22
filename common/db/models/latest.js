@@ -1,4 +1,4 @@
-// TOP 30 熱門
+// top 30 hot article
 var mongodb = require('../connect');
 var Schema = mongodb.mongoose.Schema;
 var Promise = require('es6-promise').Promise;
@@ -7,43 +7,43 @@ var LatestSchema = new Schema({
     id: String,
     title: String,
     top: Boolean,
-    comments: Number,
-    popularity: Number,
+    commentCount: Number,
+    likeCount: Number,
     dtime: String,
 });
 
 var Latest = mongodb.mongoose.model('Latest', LatestSchema);
 
-LatestDAO.prototype =  {
+LatestDAO.prototype = {
 
     constructor: LatestDAO,
-    save: function(obj){
-        return new Promise(function(resolve, reject){
+    save: function(obj) {
+        return new Promise(function(resolve, reject) {
             var instance = new Latest(obj);
-            instance.save(function(err){
-                if(err) return reject(err);
+            instance.save(function(err) {
+                if (err) return reject(err);
                 resolve();
             });
         });
     },
-    delete: function(query){
-        return new Promise(function(resolve, reject){
-            Latest.remove(query || {}, function(err, data){
-                if(err) return reject(err)
+    delete: function(query) {
+        return new Promise(function(resolve, reject) {
+            Latest.remove(query || {}, function(err, data) {
+                if (err) return reject(err)
                 resolve(data);
             });
         });
     },
-    all: function(){
-        return new Promise(function(resolve, reject){
-            Latest.find(function(err, data){
-                if(err) return reject(err)
+    all: function() {
+        return new Promise(function(resolve, reject) {
+            Latest.find(function(err, data) {
+                if (err) return reject(err)
                 resolve(data);
             });
-            
+
         });
     }
-    
+
 };
 
 module.exports = LatestDAO;
