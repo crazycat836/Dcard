@@ -1,4 +1,4 @@
-// article list
+// 文章清單
 var mongodb = require('../connect');
 var Schema = mongodb.mongoose.Schema;
 var Promise = require('es6-promise').Promise;

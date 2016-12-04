@@ -1,4 +1,4 @@
-// statis
+// 統計用
 var mongodb = require('../connect');
 var Schema = mongodb.mongoose.Schema;
 var Promise = require('es6-promise').Promise;
@@ -6,9 +6,9 @@ var Promise = require('es6-promise').Promise;
 var StatisSchema = new Schema({
     type: String, // commentCount(評論數)  likeCount(點讚數)
     sum: Number,
-    count: Array, // top 10 star & comment
+    count: Array, // 按讚和評論前十名
     aids: Array,
-    tags: Array, // top 10 tags
+    tags: Array, // 前十名 tag
     desc: String,
     gender: String,
     school: Array,

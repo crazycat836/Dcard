@@ -1,4 +1,4 @@
-// article tag
+// 文章 tag
 var mongodb = require('../connect');
 var Schema = mongodb.mongoose.Schema;
 var Promise = require('es6-promise').Promise;

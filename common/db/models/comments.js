@@ -1,4 +1,6 @@
-// article comments (newest 30)
+// 文章評論
+// 熱門留言：type = 1 
+// 最新留言：type = 0 
 var mongodb = require('../connect');
 var Schema = mongodb.mongoose.Schema;
 var Promise = require('es6-promise').Promise;
@@ -44,10 +46,7 @@ CommentsDAO.prototype = {
                         var d = {
                             aid: data[i].aid,
                             comments: data[i].comments,
-                            type: data[i].type,
-                            // dtime: data[i].dtime,
-                            // dmonth: data[i].dmonth,
-                            // dyear: data[i].year
+                            type: data[i].type
                         }
                         result.push(d)
                     }

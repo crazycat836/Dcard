@@ -1,4 +1,4 @@
-// top 30 hot article
+// 最新 30 篇熱門文章
 var mongodb = require('../connect');
 var Schema = mongodb.mongoose.Schema;
 var Promise = require('es6-promise').Promise;
@@ -12,6 +12,7 @@ var LatestSchema = new Schema({
     dtime: String,
 });
 
+var LatestDAO = function() {};
 var Latest = mongodb.mongoose.model('Latest', LatestSchema);
 
 LatestDAO.prototype = {
