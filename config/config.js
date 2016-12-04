@@ -1,16 +1,23 @@
+/*
+spider.fire 是否啟動爬蟲
+spider.openTask 是否啟動定時任務
+spider.interval 爬蟲時間間隔
+*/
 module.exports = {
     auth: '',
     mongo: {
-        name: 'dcard',
+        name: 'admin',
         host: '127.0.0.1',
         port: 27017,
-        username: '',
-        password: '',
+        username: 'crazycat836',
+        password: 'cj8rclrcool',
+        promiseLibrary: require('es6-promise').Promise,
         url: function() {
             return ['mongodb://',
                 this.username, ':',
                 this.password, '@',
-                this.host, ':', this.port, '/', this.name].join('');
+                this.host, ':', this.port, '/', this.name
+            ].join('');
         }
     },
     mongoOptions: {
@@ -21,9 +28,10 @@ module.exports = {
             }
         }
     },
-    log: {
-        isOpenningHTTP: true,
-        isOpenningNode: true
+    spider: {
+        fire: false,
+        openTask: false,
+        interval: 10
     },
     fe: {
         developing: true
