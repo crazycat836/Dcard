@@ -6,27 +6,27 @@ var API = {
     'forumsInfo': 'https://www.dcard.tw/_api/forums',
     'article': 'https://www.dcard.tw/_api/posts/',
     'hot': 'https://www.dcard.tw/_api/posts?popular=true',
-    'comments': 'https://www.dcard.tw/_api/posts',
-    'hotcmt': 'https://www.dcard.tw/_api/posts',
+    'comments': 'https://www.dcard.tw/_api/posts/',
+    'hotcmt': 'https://www.dcard.tw/_api/posts/',
     'allArticle': 'https://www.dcard.tw/_api/posts?popular=true&before='
 }
 
 var data = {
     // 看板資訊
     getForumsInfo: function() {
-        var url = API.forumsInfo;
         return new Promise(function(resolve, reject) {
+            var url = API.forumsInfo;
             request({
                 method: 'GET',
                 uri: url,
                 headers: { 'Authorization': config.auth }
             }, function(err, response, body) {
-                var forumsInfo = null;
-                if (!err) {
+                //var forumsInfo = [];
+                if (err) {
+                    return reject(err)
+                } else {
                     var forumsInfo = JSON.parse(body);
                     resolve(forumsInfo);
-                } else {
-                    return reject(err)
                 }
             });
 
@@ -56,8 +56,8 @@ var data = {
     },
     // 熱門文章列表
     getHot: function() {
-        var url = API.hot;
         return new Promise(function(resolve, reject) {
+            var url = API.hot;
             request({
                 method: 'GET',
                 uri: url,
@@ -96,7 +96,7 @@ var data = {
         })
     },
     // 評論
-    getNewComments: function(articleId) {
+    getNewCmt: function(articleId) {
         return new Promise(function(resolve, reject) {
             if (articleId) {
                 var url = API.comments + articleId + '/comments';
@@ -118,9 +118,9 @@ var data = {
         });
     },
     // 熱門評論
-    getHotcmt: function(articleId) {
+    getHotCmt: function(articleId) {
         return new Promise(function(resolve, reject) {
-            if (date) {
+            if (articleId) {
                 var url = API.hotcmt + articleId + '/comments?popular=true';
                 request({
                     method: 'GET',
@@ -139,8 +139,6 @@ var data = {
 
         });
     }
-
-
 }
 
 module.exports = data;
