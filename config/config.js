@@ -6,12 +6,11 @@ spider.interval 爬蟲時間間隔
 module.exports = {
     auth: '',
     mongo: {
-        name: 'admin',
+        name: 'dcard',
         host: '127.0.0.1',
         port: 27017,
         username: 'crazycat836',
         password: 'cj8rclrcool',
-        promiseLibrary: require('es6-promise').Promise,
         url: function() {
             return ['mongodb://',
                 this.username, ':',
