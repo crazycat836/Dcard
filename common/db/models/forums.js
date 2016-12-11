@@ -41,10 +41,10 @@ ForumsDAO.prototype = {
                 if (data) {
                     for (var i = 0, len = data.length; i < len; i++) {
                         d = {
-                            forumsid: data[i].forumsid,
+                            forumsAlias: data[i].forumsAlias,
                             name: data[i].name,
                             description: data[i].description,
-                            subscriptionCount: data[i].subscriptionCount,
+                            subscriptionCount: data[i].subscriptionCount
                         }
                         result.push(d)
                     }
