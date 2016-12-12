@@ -6,8 +6,8 @@ var Promise = require('es6-promise').Promise;
 var TagSchema = new Schema({
     aid: { type: String, index: true },
     tags: [String],
-    dtime: String,
-    dmonth: String
+    time: String,
+    month: String
 });
 
 var TagDAO = function() {};
@@ -28,7 +28,7 @@ TagDAO.prototype = {
     delete: function(aid) {
         return new Promise(function(resolve, reject) {
             Tag.remove({ id: aid }, function(err, data) {
-                if (err) return reject(err)
+                if (err) return reject(err);
                 resolve(d);
             });
         });
@@ -36,16 +36,16 @@ TagDAO.prototype = {
     search: function(query) {
         return new Promise(function(resolve, reject) {
             Tag.find(query, function(err, d) {
-                if (err) return reject(err)
+                if (err) return reject(err);
                 var data = [];
                 if (d.length > 0) {
                     for (var i = 0, len = d.length; i < len; i++) {
                         var re = {
                             aid: d[i].id,
                             tags: d[i].tags,
-                            dtime: d[i].dtime,
-                            dmonth: d[i].dmonth
-                        }
+                            time: d[i].time,
+                            month: d[i].month
+                        };
                         data.push(re);
                     }
                 }

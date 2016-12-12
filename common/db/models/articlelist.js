@@ -6,9 +6,9 @@ var Promise = require('es6-promise').Promise;
 var ArticleListSchema = new Schema({
     id: { type: String, index: true },
     title: String,
-    dtime: { type: String, index: true },
-    dmonth: String,
-    dyear: String
+    time: { type: String, index: true },
+    month: String,
+    year: String
 });
 
 var ArticleListDAO = function() {};
@@ -29,7 +29,7 @@ ArticleListDAO.prototype = {
     delete: function(query) {
         return new Promise(function(resolve, reject) {
             ArticleList.remove(query, function(err, data) {
-                if (err) return reject(err)
+                if (err) return reject(err);
                 resolve(data);
             });
         });
@@ -44,15 +44,15 @@ ArticleListDAO.prototype = {
     search: function(query) {
         return new Promise(function(resolve, reject) {
             ArticleList.find(query, function(err, d) {
-                if (err) return reject(err)
+                if (err) return reject(err);
                 var data = [];
                 if (d.length > 0) {
                     for (var i = 0, len = d.length; i < len; i++) {
                         var re = {
                             id: d[i].id,
                             title: d[i].title,
-                            dtime: d[i].dtime
-                        }
+                            time: d[i].time
+                        };
                         data.push(re);
                     }
                 }

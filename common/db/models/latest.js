@@ -9,7 +9,7 @@ var LatestSchema = new Schema({
     top: Boolean,
     commentCount: Number,
     likeCount: Number,
-    dtime: String,
+    time: String,
 });
 
 var LatestDAO = function() {};
@@ -30,7 +30,7 @@ LatestDAO.prototype = {
     delete: function(query) {
         return new Promise(function(resolve, reject) {
             Latest.remove(query || {}, function(err, data) {
-                if (err) return reject(err)
+                if (err) return reject(err);
                 resolve(data);
             });
         });
@@ -38,7 +38,7 @@ LatestDAO.prototype = {
     all: function() {
         return new Promise(function(resolve, reject) {
             Latest.find(function(err, data) {
-                if (err) return reject(err)
+                if (err) return reject(err);
                 resolve(data);
             });
 

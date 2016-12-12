@@ -24,7 +24,7 @@ TmpDAO.prototype = {
     delete: function(query) {
         return new Promise(function(resolve, reject) {
             Tmp.remove(query, function(err, data) {
-                if (err) return reject(err)
+                if (err) return reject(err);
                 resolve(data);
             });
         });
@@ -32,7 +32,7 @@ TmpDAO.prototype = {
     count: function(query) {
         return new Promise(function(resolve, reject) {
             Tmp.count(query, function(err, d) {
-                if (err) return reject(err)
+                if (err) return reject(err);
                 return resolve(d)
             })
         });

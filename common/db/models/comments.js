@@ -9,9 +9,9 @@ var CommentsSchema = new Schema({
     aid: { type: String, index: true },
     comments: Array,
     type: Number,
-    dtime: String,
-    dmonth: String,
-    dyear: String
+    time: String,
+    month: String,
+    year: String
 });
 
 var CommentsDAO = function() {};
@@ -31,7 +31,7 @@ CommentsDAO.prototype = {
     delete: function(query) {
         return new Promise(function(resolve, reject) {
             Comments.remove(query, function(err, data) {
-                if (err) return reject(err)
+                if (err) return reject(err);
                 resolve(data);
             });
         });
@@ -39,7 +39,7 @@ CommentsDAO.prototype = {
     search: function(query) {
         return new Promise(function(resolve, reject) {
             Comments.find(query, function(err, data) {
-                if (err) return reject(err)
+                if (err) return reject(err);
                 var result = [];
                 if (data.length) {
                     for (var i = 0, len = data.length; i < len; i++) {
@@ -47,7 +47,7 @@ CommentsDAO.prototype = {
                             aid: data[i].aid,
                             comments: data[i].comments,
                             type: data[i].type
-                        }
+                        };
                         result.push(d)
                     }
                 }

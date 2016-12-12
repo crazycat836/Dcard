@@ -28,7 +28,7 @@ ForumsDAO.prototype = {
     delete: function(query) {
         return new Promise(function(resolve, reject) {
             Forums.remove(query, function(err, data) {
-                if (err) return reject(err)
+                if (err) return reject(err);
                 resolve(data);
             });
         });
@@ -36,7 +36,7 @@ ForumsDAO.prototype = {
     search: function(query) {
         return new Promise(function(resolve, reject) {
             Forums.find(query, function(err, data) {
-                if (err) return reject(err)
+                if (err) return reject(err);
                 var result = [];
                 if (data) {
                     for (var i = 0, len = data.length; i < len; i++) {
@@ -45,7 +45,7 @@ ForumsDAO.prototype = {
                             name: data[i].name,
                             description: data[i].description,
                             subscriptionCount: data[i].subscriptionCount
-                        }
+                        };
                         result.push(d)
                     }
                 }

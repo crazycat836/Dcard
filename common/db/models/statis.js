@@ -12,8 +12,8 @@ var StatisSchema = new Schema({
     desc: String,
     gender: String,
     school: Array,
-    dmonth: { type: String, index: true },
-    dyear: String
+    month: { type: String, index: true },
+    year: String
 });
 
 var StatisDAO = function() {};
@@ -45,7 +45,7 @@ StatisDAO.prototype = {
                 var result = [];
                 if (data) {
                     for (var i = 0, len = data.length; i < len; i++) {
-                        d = {
+                        var d = {
                             type: data[i].type,
                             sum: data[i].sum,
                             count: data[i].count,
@@ -53,8 +53,8 @@ StatisDAO.prototype = {
                             tags: data[i].tags,
                             gender: data[i].gender,
                             school: data[i].school,
-                            dmonth: data[i].dmonth
-                        }
+                            month: data[i].month
+                        };
                         result.push(d)
                     }
                 }

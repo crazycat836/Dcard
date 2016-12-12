@@ -7,9 +7,9 @@ var CmtCountSchema = new Schema({
     aid: { type: String, index: true }, // 單篇文章用
     commentCount: Number,
     likeCount: Number,
-    dtime: { type: String, index: true }, // 歷史紀錄用
-    dmonth: { type: String, index: true }, // 統計用
-    dyear: String
+    time: { type: String, index: true }, // 歷史紀錄用
+    month: { type: String, index: true }, // 統計用
+    year: String
 });
 
 var CmtCountDAO = function() {};
@@ -37,7 +37,7 @@ CmtCountDAO.prototype = {
     search: function(query) {
         return new Promise(function(resolve, reject) {
             CmtCount.find(query, function(err, data) {
-                if (err) return reject(err)
+                if (err) return reject(err);
                 var result = [];
                 if (data) {
                     for (var i = 0, len = data.length; i < len; i++) {
@@ -45,10 +45,10 @@ CmtCountDAO.prototype = {
                             aid: data[i].aid,
                             commentCount: data[i].commentCount,
                             likeCount: data[i].likeCount,
-                            dtime: data[i].dtime,
-                            dmonth: data[i].dmonth,
-                            dyear: data[i].dyear
-                        }
+                            time: data[i].time,
+                            month: data[i].month,
+                            year: data[i].year
+                        };
                         result.push(d);
                     }
                 }
