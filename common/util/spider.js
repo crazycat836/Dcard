@@ -71,27 +71,27 @@ const Spider = {
                     console.log("title = " + d[i].title);
                     console.log("id = " + d[i].id);
                     console.log("=======================");
-                    const adate = d[i].createdAt.substr(0, 10).split("-").join('');
+                    const date = d[i].createdAt.substr(0, 10).split("-").join('');
                     const data = {
                         id: d[i].id,
                         title: d[i].title,
-                        dtime: adate,
-                        dmonth: adate.substr(0, 6),
-                        dyear: adate.substr(0, 4)
+                        time: date,
+                        month: date.substr(0, 6),
+                        year: date.substr(0, 4)
                     };
-                    //Spider.dataOne(data, adate);
+                    Spider.dataOne(data);
                 }
-                return Promise.resolve(laid);
+                return Promise.resolve({laid:laid,length:length});
             })
-            .then(function(laid, length) {
-                console.log("data - laid = " + laid);
-                console.log("length " + length);
-                Spider.day(laid);
+            .then(function(d) {
+                console.log("data - laid = " + d.laid);
+                console.log("length " + d.length);
+                //Spider.day(test.laid);
             });
     },
-    dayRefresh: function(dtime) {
-        const query = { dtime: dtime };
-        return tmpDAO.count({ dtime: dtime })
+    dayRefresh: function(time) {
+        const query = { time: time };
+        return tmpDAO.count({ time: time })
             .then(function(d) {
                 if (d == 0) {
                     return Promise.reject('over');
@@ -109,47 +109,47 @@ const Spider = {
                 return cmtCountDAO.delete(query);
             })
             .then(function() {
-                Spider.day(new DateCalc(dtime).after())
+                Spider.day(new DateCalc(time).after())
                     .then(function() {
                         return tmpDAO.delete(query);
                     })
             })
             .catch(function(err) {
-                tmpDAO.save({ aid: '', dtime: dtime });
+                tmpDAO.save({ aid: '', time: time });
                 return Promise.reject(err);
             })
     },
-    dataOne: function(data, date) {
+    dataOne: function(data) {
         return Spider.articleList(data)
             .then(function(d) {
-                return Spider.article(d.aid, d.dtime);
+                return Spider.article(d.aid, d.time);
             })
             .then(function(d) {
-                return Spider.cmtHot(d.aid, d.dtime);
+                return Spider.cmtHot(d.aid, d.time);
             })
             .then(function(d) {
-                return Spider.cmtNew(d.aid, d.dtime);
+                return Spider.cmtNew(d.aid, d.time);
             })
             .then(function(d) {
-                return Spider.cmtCount(d.aid, d.dtime);
+                return Spider.cmtCount(d.aid, d.time);
             })
             .catch(function(e) {
-                tmpDAO.save({ aid: '', dtime: data.dtime });
+                tmpDAO.save({ aid: '', time: data.time });
             });
     },
     // 文章清單
     articleList: function(data) {
         return articleListDAO.save(data)
             .then(function(err) {
-                return Promise.resolve({ aid: data.id, dtime: data.dtime });
+                return Promise.resolve({ aid: data.id, time: data.time });
             })
             .catch(function(err) {
-                tmpDAO.save({ aid: '', dtime: dtime });
+                tmpDAO.save({ aid: '', time: data.time});
                 logger.error('get articleList error @id: ' + data.id, err);
             });
     },
     // 文章詳情
-    article: function(aid, dtime) {
+    article: function(aid, time) {
         return DcardAPI.getArticle(aid).then(function(article) {
                 const data = {
                     id: aid,
@@ -158,9 +158,9 @@ const Spider = {
                     gender: article.gender,
                     school: article.school || '',
                     department: article.department || '',
-                    dtime: dtime,
-                    dmonth: dtime.substr(0, 6),
-                    dyear: dtime.substr(0, 4)
+                    time: time,
+                    month: time.substr(0, 6),
+                    year: time.substr(0, 4)
                 };
                 return articleDAO.save(data)
                     .then(function() {
@@ -177,77 +177,77 @@ const Spider = {
             });
     },
     // 熱門留言
-    cmtHot: function(aid, dtime) {
+    cmtHot: function(aid, time) {
         return DcardAPI.getHotCmt(aid)
-            .then(function(cmts) {
+            .then(function(comments) {
                 const data = {
                     aid: aid,
-                    comments: cmts,
+                    comments: comments,
                     type: 1,
-                    dtime: dtime,
-                    dmonth: dtime.substr(0, 6),
-                    dyear: dtime.substr(0, 4)
+                    time: time,
+                    month: time.substr(0, 6),
+                    year: time.substr(0, 4)
                 };
                 return commentsDAO.save(data)
                     .then(function() {
-                        return Promise.resolve({ aid: aid, dtime: dtime });
+                        return Promise.resolve({ aid: aid, time: time });
                     })
                     .catch(function(err) {
                         logger.error('get cmtHot error @id: ' + aid, err);
                     });
             })
             .catch(function(err) {
-                tmpDAO.save({ aid: aid, dtime: dtime });
+                tmpDAO.save({ aid: aid, time: time });
                 logger.error('Hot comments save error @id: ' + aid, err);
             });
     },
     // 最新留言
-    cmtNew: function(aid, dtime) {
+    cmtNew: function(aid, time) {
         return DcardAPI.getNewCmt(aid)
-            .then(function(cmts) {
+            .then(function(comments) {
                 const data = {
                     aid: aid,
-                    comments: cmts,
+                    comments: comments,
                     type: 0,
-                    dtime: dtime,
-                    dmonth: dtime.substr(0, 6),
-                    dyear: dtime.substr(0, 4)
+                    time: time,
+                    month: time.substr(0, 6),
+                    year: time.substr(0, 4)
                 };
                 return commentsDAO.save(data)
                     .then(function() {
-                        return Promise.resolve({ aid: aid, dtime: dtime });
+                        return Promise.resolve({ aid: aid, time: time });
                     })
                     .catch(function(err) {
                         logger.error('get cmtNew error @id: ' + aid, err);
                     });
             })
             .catch(function(err) {
-                tmpDAO.save({ aid: aid, dtime: dtime });
+                tmpDAO.save({ aid: aid, time: time });
                 logger.error('New comments save error @aid: ' + aid, err);
             });
     },
     // 評論數＆點讚數
     // getArticle 也可以取得評論數＆點讚數
-    cmtCount: function(aid, dtime) {
+    cmtCount: function(aid, time) {
         return DcardAPI.getArticle(aid).then(function(count) {
                 const data = {
                     aid: aid,
                     commentCount: count.commentCount || 0,
                     likeCount: count.likeCount || 0,
-                    dtime: dtime,
-                    dmonth: dtime.substr(0, 6),
-                    dyear: dtime.substr(0, 4)
+                    time: time,
+                    month: time.substr(0, 6),
+                    year: time.substr(0, 4)
                 };
                 return cmtCountDAO.save(data)
                     .then(function() {
-                        return Promise.resolve({ aid: aid, dtime: dtime });
+                        return Promise.resolve({ aid: aid, time: time });
                     })
                     .catch(function(err) {
                         logger.error('get cmtCount error @id: ' + aid, err);
                     });
             })
             .catch(function(err) {
-                tmpDAO.save({ aid: aid, dtime: dtime });
+                tmpDAO.save({ aid: aid, time: time });
                 logger.error('comments count save error @aid: ' + aid, err);
             });
     },
@@ -332,7 +332,7 @@ const Spider = {
     // 評論數更新
     updateCmtCount: function(start, end) {
         const aidsArr = [];
-        return cmtCountDAO.search({ dtime: start })
+        return cmtCountDAO.search({ time: start })
             .then(function(d) {
                 if (d.length) {
                     for (let i = 0; i < d.length; i++) {
