@@ -1,11 +1,11 @@
 // 文章評論
 // 熱門留言：type = 1 
 // 最新留言：type = 0 
-var mongodb = require('../connect');
-var Schema = mongodb.mongoose.Schema;
-var Promise = require('es6-promise').Promise;
+const mongodb = require('../connect');
+const Schema = mongodb.mongoose.Schema;
+const Promise = require('es6-promise').Promise;
 
-var CommentsSchema = new Schema({
+const CommentsSchema = new Schema({
     aid: { type: String, index: true },
     comments: Array,
     type: Number,
@@ -14,14 +14,14 @@ var CommentsSchema = new Schema({
     year: String
 });
 
-var CommentsDAO = function() {};
-var Comments = mongodb.mongoose.model('Comments', CommentsSchema);
+const CommentsDAO = function() {};
+const Comments = mongodb.mongoose.model('Comments', CommentsSchema);
 
 CommentsDAO.prototype = {
     constructor: CommentsDAO,
     save: function(obj) {
         return new Promise(function(resolve, reject) {
-            var instance = new Comments(obj);
+            const instance = new Comments(obj);
             instance.save(function(err) {
                 if (err) return reject(err);
                 resolve();
@@ -40,10 +40,10 @@ CommentsDAO.prototype = {
         return new Promise(function(resolve, reject) {
             Comments.find(query, function(err, data) {
                 if (err) return reject(err);
-                var result = [];
+                const result = [];
                 if (data.length) {
-                    for (var i = 0, len = data.length; i < len; i++) {
-                        var d = {
+                    for (let i = 0, len = data.length; i < len; i++) {
+                        const d = {
                             aid: data[i].aid,
                             comments: data[i].comments,
                             type: data[i].type

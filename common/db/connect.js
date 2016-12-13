@@ -1,9 +1,9 @@
-var mongoose = require('mongoose');
+const mongoose = require('mongoose');
 
-var config = require('../../config/config').mongo;
+const config = require('../../config/config').mongo;
 
-var dbUrl = config.url();
-var dbOption = config.mongoOptions;
+const dbUrl = config.url();
+const dbOption = config.mongoOptions;
 mongoose.connect(dbUrl, dbOption);
 
 exports.mongoose = mongoose;

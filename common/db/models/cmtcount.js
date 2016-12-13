@@ -1,9 +1,9 @@
 // 文章按讚和評論數
-var mongodb = require('../connect');
-var Schema = mongodb.mongoose.Schema;
-var Promise = require('es6-promise').Promise;
+const mongodb = require('../connect');
+const Schema = mongodb.mongoose.Schema;
+const Promise = require('es6-promise').Promise;
 
-var CmtCountSchema = new Schema({
+const CmtCountSchema = new Schema({
     aid: { type: String, index: true }, // 單篇文章用
     commentCount: Number,
     likeCount: Number,
@@ -12,14 +12,14 @@ var CmtCountSchema = new Schema({
     year: String
 });
 
-var CmtCountDAO = function() {};
-var CmtCount = mongodb.mongoose.model('CmtCount', CmtCountSchema);
+const CmtCountDAO = function() {};
+const CmtCount = mongodb.mongoose.model('CmtCount', CmtCountSchema);
 
 CmtCountDAO.prototype = {
     constructor: CmtCountDAO,
     save: function(obj) {
         return new Promise(function(resolve, reject) {
-            var instance = new CmtCount(obj);
+            const instance = new CmtCount(obj);
             instance.save(function(err) {
                 if (err) return reject(err);
                 resolve();
@@ -38,10 +38,10 @@ CmtCountDAO.prototype = {
         return new Promise(function(resolve, reject) {
             CmtCount.find(query, function(err, data) {
                 if (err) return reject(err);
-                var result = [];
+                const result = [];
                 if (data) {
-                    for (var i = 0, len = data.length; i < len; i++) {
-                        var d = {
+                    for (let i = 0, len = data.length; i < len; i++) {
+                        const d = {
                             aid: data[i].aid,
                             commentCount: data[i].commentCount,
                             likeCount: data[i].likeCount,

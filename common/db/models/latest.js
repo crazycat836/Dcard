@@ -1,9 +1,9 @@
 // 最新 30 篇熱門文章
-var mongodb = require('../connect');
-var Schema = mongodb.mongoose.Schema;
-var Promise = require('es6-promise').Promise;
+const mongodb = require('../connect');
+const Schema = mongodb.mongoose.Schema;
+const Promise = require('es6-promise').Promise;
 
-var LatestSchema = new Schema({
+const LatestSchema = new Schema({
     id: String,
     title: String,
     top: Boolean,
@@ -12,15 +12,15 @@ var LatestSchema = new Schema({
     time: String,
 });
 
-var LatestDAO = function() {};
-var Latest = mongodb.mongoose.model('Latest', LatestSchema);
+const LatestDAO = function() {};
+const Latest = mongodb.mongoose.model('Latest', LatestSchema);
 
 LatestDAO.prototype = {
 
     constructor: LatestDAO,
     save: function(obj) {
         return new Promise(function(resolve, reject) {
-            var instance = new Latest(obj);
+            const instance = new Latest(obj);
             instance.save(function(err) {
                 if (err) return reject(err);
                 resolve();

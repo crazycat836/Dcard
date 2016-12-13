@@ -1,24 +1,24 @@
 // 看板詳情
-var mongodb = require('../connect');
-var Schema = mongodb.mongoose.Schema;
-var Promise = require('es6-promise').Promise;
+const mongodb = require('../connect');
+const Schema = mongodb.mongoose.Schema;
+const Promise = require('es6-promise').Promise;
 
-var ForumsSchema = new Schema({
+const ForumsSchema = new Schema({
     forumsAlias: { type: String, index: true },
     name: String,
     description: String,
     subscriptionCount: String
 });
 
-var ForumsDAO = function() {};
-var Forums = mongodb.mongoose.model('Forums', ForumsSchema);
+const ForumsDAO = function() {};
+const Forums = mongodb.mongoose.model('Forums', ForumsSchema);
 
 ForumsDAO.prototype = {
 
     constructor: ForumsDAO,
     save: function(obj) {
         return new Promise(function(resolve, reject) {
-            var instance = new Forums(obj);
+            const instance = new Forums(obj);
             instance.save(function(err) {
                 if (err) return reject(err);
                 resolve();
@@ -37,9 +37,9 @@ ForumsDAO.prototype = {
         return new Promise(function(resolve, reject) {
             Forums.find(query, function(err, data) {
                 if (err) return reject(err);
-                var result = [];
+                const result = [];
                 if (data) {
-                    for (var i = 0, len = data.length; i < len; i++) {
+                    for (let i = 0, len = data.length; i < len; i++) {
                         d = {
                             forumsAlias: data[i].forumsAlias,
                             name: data[i].name,

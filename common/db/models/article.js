@@ -1,29 +1,29 @@
 //  文章詳情
-var mongodb = require('../connect');
-var Schema = mongodb.mongoose.Schema;
-var Promise = require('es6-promise').Promise;
+const mongodb = require('../connect');
+const Schema = mongodb.mongoose.Schema;
+const Promise = require('es6-promise').Promise;
 
-var ArticleSchema = new Schema({
+const ArticleSchema = new Schema({
     id: { type: String, index: true },
     title: String,
     content: String,
     gender: String,
     school: String,
     department: String,
-    dtime: String,
-    dmonth: String,
-    dyear: String
+    time: String,
+    month: String,
+    year: String
 });
 
-var ArticleDAO = function() {};
-var Article = mongodb.mongoose.model('Article', ArticleSchema);
+const ArticleDAO = function() {};
+const Article = mongodb.mongoose.model('Article', ArticleSchema);
 
 ArticleDAO.prototype = {
 
     constructor: ArticleDAO,
     save: function(obj) {
         return new Promise(function(resolve, reject) {
-            var instance = new Article(obj);
+            const instance = new Article(obj);
             instance.save(function(err) {
                 if (err) return reject(err);
                 resolve();
@@ -33,7 +33,7 @@ ArticleDAO.prototype = {
     delete: function(query) {
         return new Promise(function(resolve, reject) {
             Article.remove(query, function(err, data) {
-                if (err) return reject(err)
+                if (err) return reject(err);
                 resolve(data);
             });
         });
@@ -41,10 +41,10 @@ ArticleDAO.prototype = {
     search: function(query) {
         return new Promise(function(resolve, reject) {
             Article.find(query, function(err, data) {
-                if (err) return reject(err)
-                var result = [];
+                if (err) return reject(err);
+                const result = [];
                 if (data) {
-                    for (var i = 0, len = data.length; i < len; i++) {
+                    for (let i = 0, len = data.length; i < len; i++) {
                         d = {
                             id: data[i].id,
                             title: data[i].title,
@@ -52,10 +52,10 @@ ArticleDAO.prototype = {
                             gender: data[i].gender,
                             school: data[i].school,
                             department: data[i].department,
-                            dtime: data[i].dtime,
-                            dmonth: data[i].dmonth,
-                            dyear: data[i].dyear
-                        }
+                            time: data[i].time,
+                            month: data[i].month,
+                            year: data[i].year
+                        };
                         result.push(d)
                     }
                 }

@@ -1,20 +1,20 @@
-var mongodb = require('../connect');
-var Schema = mongodb.mongoose.Schema;
-var Promise = require('es6-promise').Promise;
+const mongodb = require('../connect');
+const Schema = mongodb.mongoose.Schema;
+const Promise = require('es6-promise').Promise;
 
-var TmpSchema = new Schema({
+const TmpSchema = new Schema({
     aid: String,
-    dtime: String
+    time: String
 });
 
-var TmpDAO = function() {};
-var Tmp = mongodb.mongoose.model('Tmp', TmpSchema);
+const TmpDAO = function() {};
+const Tmp = mongodb.mongoose.model('Tmp', TmpSchema);
 
 TmpDAO.prototype = {
     constructor: TmpDAO,
     save: function(obj) {
         return new Promise(function(resolve, reject) {
-            var instance = new Tmp(obj);
+            const instance = new Tmp(obj);
             instance.save(function(err) {
                 if (err) return reject(err);
                 resolve();
@@ -48,14 +48,14 @@ TmpDAO.prototype = {
     search: function(query) {
         return new Promise(function(resolve, reject) {
             Tmp.find(query, function(err, d) {
-                if (err) return reject(err)
-                var data = [];
+                if (err) return reject(err);
+                const data = [];
                 if (d.length > 0) {
-                    for (var i = 0, len = d.length; i < len; i++) {
-                        var re = {
+                    for (let i = 0, len = d.length; i < len; i++) {
+                        const re = {
                             id: d[i].aid,
-                            dtime: d[i].dtime
-                        }
+                            time: d[i].time
+                        };
                         data.push(re);
                     }
                 }

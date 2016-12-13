@@ -1,9 +1,9 @@
 // 統計用
-var mongodb = require('../connect');
-var Schema = mongodb.mongoose.Schema;
-var Promise = require('es6-promise').Promise;
+const mongodb = require('../connect');
+const Schema = mongodb.mongoose.Schema;
+const Promise = require('es6-promise').Promise;
 
-var StatisSchema = new Schema({
+const StatisSchema = new Schema({
     type: String, // commentCount(評論數)  likeCount(點讚數)
     sum: Number,
     count: Array, // 按讚和評論前十名
@@ -16,15 +16,15 @@ var StatisSchema = new Schema({
     year: String
 });
 
-var StatisDAO = function() {};
-var Statis = mongodb.mongoose.model('Statis', StatisSchema);
+const StatisDAO = function() {};
+const Statis = mongodb.mongoose.model('Statis', StatisSchema);
 
 StatisDAO.prototype = {
 
     constructor: StatisDAO,
     save: function(obj) {
         return new Promise(function(resolve, reject) {
-            var instance = new Statis(obj);
+            const instance = new Statis(obj);
             instance.save(function(err) {
                 if (err) return reject(err);
                 resolve();
@@ -42,10 +42,10 @@ StatisDAO.prototype = {
         return new Promise(function(resolve, reject) {
             Statis.find(query, function(err, data) {
                 if (err) return reject(err)
-                var result = [];
+                const result = [];
                 if (data) {
-                    for (var i = 0, len = data.length; i < len; i++) {
-                        var d = {
+                    for (let i = 0, len = data.length; i < len; i++) {
+                        const d = {
                             type: data[i].type,
                             sum: data[i].sum,
                             count: data[i].count,

@@ -1,24 +1,24 @@
 // 文章 tag
-var mongodb = require('../connect');
-var Schema = mongodb.mongoose.Schema;
-var Promise = require('es6-promise').Promise;
+const mongodb = require('../connect');
+const Schema = mongodb.mongoose.Schema;
+const Promise = require('es6-promise').Promise;
 
-var TagSchema = new Schema({
+const TagSchema = new Schema({
     aid: { type: String, index: true },
     tags: [String],
     time: String,
     month: String
 });
 
-var TagDAO = function() {};
-var Tag = mongodb.mongoose.model('Tag', TagSchema);
+const TagDAO = function() {};
+const Tag = mongodb.mongoose.model('Tag', TagSchema);
 
 TagDAO.prototype = {
 
     constructor: TagDAO,
     save: function(obj) {
         return new Promise(function(resolve, reject) {
-            var instance = new Tag(obj);
+            const instance = new Tag(obj);
             instance.save(function(err) {
                 if (err) return reject(err);
                 resolve();
@@ -37,10 +37,10 @@ TagDAO.prototype = {
         return new Promise(function(resolve, reject) {
             Tag.find(query, function(err, d) {
                 if (err) return reject(err);
-                var data = [];
+                const data = [];
                 if (d.length > 0) {
-                    for (var i = 0, len = d.length; i < len; i++) {
-                        var re = {
+                    for (let i = 0, len = d.length; i < len; i++) {
+                        const re = {
                             aid: d[i].id,
                             tags: d[i].tags,
                             time: d[i].time,

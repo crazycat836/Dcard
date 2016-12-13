@@ -1,9 +1,9 @@
 // 文章清單
-var mongodb = require('../connect');
-var Schema = mongodb.mongoose.Schema;
-var Promise = require('es6-promise').Promise;
+const mongodb = require('../connect');
+const Schema = mongodb.mongoose.Schema;
+const Promise = require('es6-promise').Promise;
 
-var ArticleListSchema = new Schema({
+const ArticleListSchema = new Schema({
     id: { type: String, index: true },
     title: String,
     time: { type: String, index: true },
@@ -11,15 +11,15 @@ var ArticleListSchema = new Schema({
     year: String
 });
 
-var ArticleListDAO = function() {};
-var ArticleList = mongodb.mongoose.model('ArticleList', ArticleListSchema);
+const ArticleListDAO = function() {};
+const ArticleList = mongodb.mongoose.model('ArticleList', ArticleListSchema);
 
 ArticleListDAO.prototype = {
 
     constructor: ArticleListDAO,
     save: function(obj) {
         return new Promise(function(resolve, reject) {
-            var instance = new ArticleList(obj);
+            const instance = new ArticleList(obj);
             instance.save(function(err) {
                 if (err) return reject(err);
                 resolve();
@@ -45,10 +45,10 @@ ArticleListDAO.prototype = {
         return new Promise(function(resolve, reject) {
             ArticleList.find(query, function(err, d) {
                 if (err) return reject(err);
-                var data = [];
+                const data = [];
                 if (d.length > 0) {
-                    for (var i = 0, len = d.length; i < len; i++) {
-                        var re = {
+                    for (let i = 0, len = d.length; i < len; i++) {
+                        const re = {
                             id: d[i].id,
                             title: d[i].title,
                             time: d[i].time
