@@ -45,7 +45,7 @@ ArticleDAO.prototype = {
                 const result = [];
                 if (data) {
                     for (let i = 0, len = data.length; i < len; i++) {
-                        d = {
+                        const d = {
                             id: data[i].id,
                             title: data[i].title,
                             content: data[i].content,
