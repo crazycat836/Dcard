@@ -1,31 +1,31 @@
-var Promise = require('es6-promise').Promise;
-var request = require('request');
-var config = require('../../config/config');
+const Promise = require('es6-promise').Promise;
+const request = require('request');
+const config = require('../../config/config');
 
-var API = {
+const API = {
     'forumsInfo': 'https://www.dcard.tw/_api/forums',
     'article': 'https://www.dcard.tw/_api/posts/',
     'hot': 'https://www.dcard.tw/_api/posts?popular=true',
     'comments': 'https://www.dcard.tw/_api/posts/',
     'hotcmt': 'https://www.dcard.tw/_api/posts/',
     'allArticle': 'https://www.dcard.tw/_api/posts?popular=true&before='
-}
+};
 
-var data = {
+const data = {
     // 看板資訊
     getForumsInfo: function() {
         return new Promise(function(resolve, reject) {
-            var url = API.forumsInfo;
+            const url = API.forumsInfo;
             request({
                 method: 'GET',
                 uri: url,
                 headers: { 'Authorization': config.auth }
             }, function(err, response, body) {
-                //var forumsInfo = [];
+                //const forumsInfo = [];
                 if (err) {
                     return reject(err)
                 } else {
-                    var forumsInfo = JSON.parse(body);
+                    const forumsInfo = JSON.parse(body);
                     resolve(forumsInfo);
                 }
             });
@@ -36,7 +36,7 @@ var data = {
     getAllArticle: function(articleId) {
         return new Promise(function(resolve, reject) {
             if (articleId) {
-                var url = API.allArticle + articleId;
+                const url = API.allArticle + articleId;
                 request({
                     method: 'GET',
                     uri: url,
@@ -57,15 +57,15 @@ var data = {
     // 熱門文章列表
     getHot: function() {
         return new Promise(function(resolve, reject) {
-            var url = API.hot;
+            const url = API.hot;
             request({
                 method: 'GET',
                 uri: url,
                 headers: { 'Authorization': config.auth }
             }, function(err, response, body) {
-                var hotArticle = null;
+                const hotArticle = null;
                 if (!err) {
-                    var hotArticle = JSON.parse(body);
+                    const hotArticle = JSON.parse(body);
                     resolve(hotArticle);
                 } else {
                     return reject(err)
@@ -78,7 +78,7 @@ var data = {
     getArticle: function(articleId) {
         return new Promise(function(resolve, reject) {
             if (articleId) {
-                var url = API.article + articleId;
+                const url = API.article + articleId;
                 request({
                     method: 'GET',
                     uri: url,
@@ -99,7 +99,7 @@ var data = {
     getNewCmt: function(articleId) {
         return new Promise(function(resolve, reject) {
             if (articleId) {
-                var url = API.comments + articleId + '/comments';
+                const url = API.comments + articleId + '/comments';
                 request({
                     method: 'GET',
                     uri: url,
@@ -121,7 +121,7 @@ var data = {
     getHotCmt: function(articleId) {
         return new Promise(function(resolve, reject) {
             if (articleId) {
-                var url = API.hotcmt + articleId + '/comments?popular=true';
+                const url = API.hotcmt + articleId + '/comments?popular=true';
                 request({
                     method: 'GET',
                     uri: url,
@@ -139,6 +139,6 @@ var data = {
 
         });
     }
-}
+};
 
 module.exports = data;
