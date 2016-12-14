@@ -58,14 +58,10 @@ const Spider = {
     day: function(articleId) {
         return DcardAPI.getAllArticle(articleId)
             .then(function(articleList) {
-                //logger.info("start day spider !");
                 const d = articleList,
                     laid = d[d.length - 1].id,
                     length = d.length;
-                console.log("last article id = " + laid);
-                console.log("                      ");
-                console.log("length " + length);
-                for (let i = 0, len = d.length; i < len; i++) {
+                for (let i = 0, len = length; i < len; i++) {
                     // 日期重新格式化
                     // createdAt: 2016-11-20T10:56:36.075Z
                     console.log("title = " + d[i].title);
@@ -79,14 +75,22 @@ const Spider = {
                         month: date.substr(0, 6),
                         year: date.substr(0, 4)
                     };
-                    Spider.dataOne(data);
+                    //Spider.dataOne(data);
                 }
-                return Promise.resolve({laid:laid,length:length});
+
+                return Promise.resolve({ laid: laid, length: length });
+
             })
             .then(function(d) {
                 console.log("data - laid = " + d.laid);
                 console.log("length " + d.length);
-                //Spider.day(test.laid);
+
+                if (d.length == 30) {
+                    Spider.day(d.laid);
+                } else {
+                    logger.info('article save complete !');
+                }
+
             });
     },
     dayRefresh: function(time) {
@@ -133,18 +137,19 @@ const Spider = {
             .then(function(d) {
                 return Spider.cmtCount(d.aid, d.time);
             })
-            .catch(function(e) {
+            .catch(function(err) {
                 tmpDAO.save({ aid: '', time: data.time });
+                logger.error('get dataOne error: ' + err);
             });
     },
     // 文章清單
     articleList: function(data) {
         return articleListDAO.save(data)
-            .then(function(err) {
+            .then(function() {
                 return Promise.resolve({ aid: data.id, time: data.time });
             })
             .catch(function(err) {
-                tmpDAO.save({ aid: '', time: data.time});
+                tmpDAO.save({ aid: '', time: data.time });
                 logger.error('get articleList error @id: ' + data.id, err);
             });
     },
@@ -165,14 +170,14 @@ const Spider = {
                 return articleDAO.save(data)
                     .then(function() {
                         // console.log('article over aid ' + aid);
-                        return Promise.resolve({ aid: aid, dtime: dtime });
+                        return Promise.resolve({ aid: aid, time: time });
                     })
                     .catch(function(err) {
                         logger.error('article save error @aid: ' + aid, err);
                     });
             })
             .catch(function(err) {
-                tmpDAO.save({ aid: aid, dtime: dtime });
+                tmpDAO.save({ aid: aid, time: time });
                 logger.error('article save error @id: ' + aid, err);
             });
     },
@@ -366,11 +371,11 @@ const Spider = {
     },
     // 看板資訊更新
     updateForumsInfo: function() {
-        var forumsAliasArr = [];
+        const forumsAliasArr = [];
         return forumsDAO.search({ forumsAlias: { $exists: true } })
             .then(function(d) {
                 if (d.length) {
-                    for (var i = 0; i < d.length; i++) {
+                    for (let i = 0; i < d.length; i++) {
                         forumsAliasArr.push(d[i].forumsAlias);
                     }
                     return forumsDAO.delete({ forumsAlias: { $in: forumsAliasArr } })
@@ -386,5 +391,5 @@ const Spider = {
                 return Promise.resolve(start);
             })
     }
-}
+};
 module.exports = Spider;
