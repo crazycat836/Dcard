@@ -35,4 +35,4 @@ module.exports = {
     fe: {
         developing: true
     }
-}
+};
