@@ -7,7 +7,8 @@ const API = {
     'article': 'https://www.dcard.tw/_api/posts/',
     'hot': 'https://www.dcard.tw/_api/posts?popular=true',
     'comments': 'https://www.dcard.tw/_api/posts/',
-    'hotcmt': 'https://www.dcard.tw/_api/posts/',
+    'hotCmt': 'https://www.dcard.tw/_api/posts/',
+    'tag': 'https://www.dcard.tw/_api/posts/',
     'allArticle': 'https://www.dcard.tw/_api/posts?popular=true&before='
 };
 
@@ -63,12 +64,11 @@ const data = {
                 uri: url,
                 headers: { 'Authorization': config.auth }
             }, function(err, response, body) {
-                const hotArticle = null;
-                if (!err) {
+                if (err) {
+                    return reject(err);
+                } else {
                     const hotArticle = JSON.parse(body);
                     resolve(hotArticle);
-                } else {
-                    return reject(err)
                 }
             });
 
@@ -121,7 +121,7 @@ const data = {
     getHotCmt: function(articleId) {
         return new Promise(function(resolve, reject) {
             if (articleId) {
-                const url = API.hotcmt + articleId + '/comments?popular=true';
+                const url = API.hotCmt + articleId + '/comments?popular=true';
                 request({
                     method: 'GET',
                     uri: url,
@@ -138,7 +138,28 @@ const data = {
             }
 
         });
-    }
+    },
+    getTag: function(articleId) {
+        return new Promise(function(resolve, reject) {
+            if (articleId) {
+                const url = API.tag + articleId;
+                request({
+                    method: 'GET',
+                    uri: url,
+                    headers: { 'Authorization': config.auth }
+                }, function(err, response, body) {
+                    if (err) {
+                        return reject(err);
+                    } else {
+                        resolve(JSON.parse(body));
+                    }
+                });
+            } else {
+                reject(null);
+            }
+            
+        });
+    },
 };
 
 module.exports = data;
