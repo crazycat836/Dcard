@@ -3,10 +3,9 @@
 // 最新留言：type = 0 
 const mongodb = require('../connect');
 const Schema = mongodb.mongoose.Schema;
-const Promise = require('es6-promise').Promise;
 
 const CommentsSchema = new Schema({
-    aid: { type: String, index: true },
+    id: { type: String, index: true },
     comments: Array,
     type: Number,
     time: String,

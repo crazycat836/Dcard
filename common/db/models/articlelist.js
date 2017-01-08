@@ -1,7 +1,6 @@
 // 文章清單
 const mongodb = require('../connect');
 const Schema = mongodb.mongoose.Schema;
-const Promise = require('es6-promise').Promise;
 
 const ArticleListSchema = new Schema({
     id: { type: String, index: true },

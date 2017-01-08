@@ -1,9 +1,8 @@
 const mongodb = require('../connect');
 const Schema = mongodb.mongoose.Schema;
-const Promise = require('es6-promise').Promise;
 
 const TmpSchema = new Schema({
-    aid: String,
+    id: String,
     time: String
 });
 

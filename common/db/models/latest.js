@@ -1,12 +1,11 @@
 // 最新 30 篇熱門文章
 const mongodb = require('../connect');
 const Schema = mongodb.mongoose.Schema;
-const Promise = require('es6-promise').Promise;
 
 const LatestSchema = new Schema({
     id: String,
     title: String,
-    top: Boolean,
+    latest: Boolean,
     commentCount: Number,
     likeCount: Number,
     time: String,

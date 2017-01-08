@@ -1,13 +1,12 @@
 // 統計用
 const mongodb = require('../connect');
 const Schema = mongodb.mongoose.Schema;
-const Promise = require('es6-promise').Promise;
 
 const StatisSchema = new Schema({
     type: String, // commentCount(評論數)  likeCount(點讚數)
     sum: Number,
     count: Array, // 按讚和評論前十名
-    aids: Array,
+    ids: Array,
     tags: Array, // 前十名 tag
     desc: String,
     gender: String,

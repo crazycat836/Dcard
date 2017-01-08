@@ -1,7 +1,6 @@
 // 看板詳情
 const mongodb = require('../connect');
 const Schema = mongodb.mongoose.Schema;
-const Promise = require('es6-promise').Promise;
 
 const ForumsSchema = new Schema({
     forumsAlias: { type: String, index: true },

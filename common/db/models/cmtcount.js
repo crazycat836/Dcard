@@ -1,10 +1,9 @@
 // 文章按讚和評論數
 const mongodb = require('../connect');
 const Schema = mongodb.mongoose.Schema;
-const Promise = require('es6-promise').Promise;
 
 const CmtCountSchema = new Schema({
-    aid: { type: String, index: true }, // 單篇文章用
+    id: { type: String, index: true }, // 單篇文章用
     commentCount: Number,
     likeCount: Number,
     time: { type: String, index: true }, // 歷史紀錄用
