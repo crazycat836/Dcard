@@ -4,7 +4,7 @@ const Schema = mongodb.mongoose.Schema;
 const Promise = require('es6-promise').Promise;
 
 const TagSchema = new Schema({
-    aid: { type: String, index: true },
+    id: { type: String, index: true },
     tags: [String],
     time: String,
     month: String
@@ -25,9 +25,9 @@ TagDAO.prototype = {
             });
         });
     },
-    delete: function(aid) {
+    delete: function(query) {
         return new Promise(function(resolve, reject) {
-            Tag.remove({ id: aid }, function(err, data) {
+            Tag.remove(query, function(err, d) {
                 if (err) return reject(err);
                 resolve(d);
             });
@@ -41,7 +41,7 @@ TagDAO.prototype = {
                 if (d.length > 0) {
                     for (let i = 0, len = d.length; i < len; i++) {
                         const re = {
-                            aid: d[i].id,
+                            id: d[i].id,
                             tags: d[i].tags,
                             time: d[i].time,
                             month: d[i].month

@@ -52,7 +52,7 @@ TmpDAO.prototype = {
                 if (d.length > 0) {
                     for (let i = 0, len = d.length; i < len; i++) {
                         const re = {
-                            id: d[i].aid,
+                            id: d[i].id,
                             time: d[i].time
                         };
                         data.push(re);
