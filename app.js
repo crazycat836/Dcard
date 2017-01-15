@@ -33,22 +33,8 @@ if (CONFIG.fe.developing) {
 */
 // 爬蟲任務
 const Job = require('./common/util/task');
-const Spider = require('./common/util/spider');
-const API = require('./common/api/api');
-//測試最後一篇文章
-//Spider.day(225317103);
+Job.fire();
 
-Spider.updateForumsInfo();
-//Spider.day(225322597);
-/*
-if (CONFIG.spider.fire) {
-    Spider.fire(CONFIG.spider.start, CONFIG.spider.end);
-}
-if (CONFIG.spider.openTask) {
-    Spider.latest();
-    Job.fire();
-}
-*/
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -64,7 +50,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 /// catch 404 and forwarding to error handler
 app.use(function(req, res, next) {
-    var err = new Error('Not Found');
+    const err = new Error('Not Found');
     err.status = 404;
     // next(err);
     res.render('error', {
@@ -97,7 +83,7 @@ app.use(function(err, req, res, next) {
 
 // ============== log4js init ==============
 
-var log4js = require('log4js');
+const log4js = require('log4js');
 log4js.loadAppender('file');
 log4js.configure({
     appenders: [{
@@ -117,8 +103,8 @@ log4js.configure({
 app.use(log4js.connectLogger(log4js.getLogger('access'), { level: log4js.levels.INFO }));
 
 app.set('port', process.env.PORT || 9000);
-var server = app.listen(app.get('port'), function() {
-    console.log('Express server listening on port ' + server.address().port);
+const server = app.listen(app.get('port'), function() {
+    //console.log('Express server listening on port ' + server.address().port);
 });
 
 
