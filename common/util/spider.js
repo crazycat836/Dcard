@@ -30,16 +30,13 @@ const Spider = {
     day: function() {
         return DcardAPI.getHot()
             .then(function(hotArticle) {
-                logger.info("start day spider!");
+                logger.info("Start Day Spider!");
                 const d = hotArticle,
                     lid = d[d.length - 1].id,
                     length = d.length;
                 for (let i = 0, len = length; i < len; i++) {
                     // 日期重新格式化
                     // createdAt: 2016-11-20T10:56:36.075Z
-                    console.log("title = " + d[i].title);
-                    console.log("id = " + d[i].id);
-                    console.log("=======================");
                     const date = d[i].createdAt.substr(0, 10).split("-").join('');
                     const data = {
                         id: d[i].id,
@@ -64,9 +61,6 @@ const Spider = {
                 for (let i = 0, len = length; i < len; i++) {
                     // 日期重新格式化
                     // createdAt: 2016-11-20T10:56:36.075Z
-                    console.log("title = " + d[i].title);
-                    console.log("id = " + d[i].id);
-                    console.log("=======================");
                     const date = d[i].createdAt.substr(0, 10).split("-").join('');
                     const data = {
                         id: d[i].id,
@@ -82,7 +76,7 @@ const Spider = {
                 if (d.length == 30) {
                     Spider.fire(d.lid);
                 } else {
-                    return Promise.resolve(logger.info('article save complete !'));
+                    return Promise.resolve(logger.info('Article Save Complete !'));
                 }
             });
     },
@@ -104,8 +98,7 @@ const Spider = {
                 return Spider.tag(d.id, d.time);
             })
             .catch(function(err) {
-                //tmpDAO.save({ id: d.id, time: d.time });
-                logger.error('get dataOne error: ' + err);
+                logger.error('Get DataOne Error: ' + err);
             });
     },
     // 文章清單
@@ -115,13 +108,14 @@ const Spider = {
                 return Promise.resolve({ id: d.id, time: d.time });
             })
             .catch(function(err) {
-                tmpDAO.save({ id: id, time: time });
-                logger.error('get articleList error @id: ' + id, err);
+                tmpDAO.save({ id: d.id, time: time });
+                logger.error('ArticleList Save Error @id: ' + d.id, err);
             });
     },
     // 文章詳情
     article: function(id, time) {
-        return DcardAPI.getArticle(id).then(function(article) {
+        return DcardAPI.getArticle(id)
+            .then(function(article) {
                 const data = {
                     id: id,
                     title: article.title,
@@ -135,16 +129,15 @@ const Spider = {
                 };
                 return articleDAO.save(data)
                     .then(function() {
-                        // console.log('article over id ' + id);
                         return Promise.resolve({ id: id, time: time });
                     })
                     .catch(function(err) {
-                        logger.error('get article error @id: ' + id, err);
+                        logger.error('Article Save Error @id: ' + id, err);
                     });
             })
             .catch(function(err) {
                 tmpDAO.save({ id: id, time: time });
-                logger.error('article save error @id: ' + id, err);
+                logger.error('Get Article Error @id: ' + id, err);
             });
     },
     // 熱門留言
@@ -164,12 +157,12 @@ const Spider = {
                         return Promise.resolve({ id: id, time: time });
                     })
                     .catch(function(err) {
-                        logger.error('get cmtHot error @id: ' + id, err);
+                        logger.error('CmtHot Save Error @id: ' + id, err);
                     });
             })
             .catch(function(err) {
                 tmpDAO.save({ id: id, time: time });
-                logger.error('cmtHot save error @id: ' + id, err);
+                logger.error('Get CmtHotError @id: ' + id, err);
             });
     },
     // 最新留言
@@ -189,12 +182,12 @@ const Spider = {
                         return Promise.resolve({ id: id, time: time });
                     })
                     .catch(function(err) {
-                        logger.error('get cmtNew error @id: ' + id, err);
+                        logger.error('CmtNew Save Error @id: ' + id, err);
                     });
             })
             .catch(function(err) {
                 tmpDAO.save({ id: id, time: time });
-                logger.error('cmtNew save error @id: ' + id, err);
+                logger.error('Get CmtNew Error @id: ' + id, err);
             });
     },
     // 評論數＆點讚數
@@ -214,12 +207,12 @@ const Spider = {
                         return Promise.resolve({ id: id, time: time });
                     })
                     .catch(function(err) {
-                        logger.error('get cmtCount error @id: ' + id, err);
+                        logger.error('CmtCount Save Error @id: ' + id, err);
                     });
             })
             .catch(function(err) {
                 tmpDAO.save({ id: id, time: time });
-                logger.error('cmtCount save error @id: ' + id, err);
+                logger.error('Get CmtCount Error @id: ' + id, err);
             });
     },
     // 文章 tag
@@ -238,12 +231,12 @@ const Spider = {
                         return Promise.resolve({ id: id, time: time });
                     })
                     .catch(function(err) {
-                        logger.error('get tags error @id: ' + id, err);
+                        logger.error('Tags Save Error @id: ' + id, err);
                     });
             })
             .catch(function(err) {
                 tmpDAO.save({ id: id, time: time });
-                logger.error('tags save error @id: ' + id, err);
+                logger.error('Get Tags Error @id: ' + id, err);
             });
     },
     // 看板資訊
@@ -266,7 +259,8 @@ const Spider = {
         latestDAO.delete({ latest: true })
             .then(function() {
                 return latestDAO.delete()
-            }).then(function() {
+            })
+            .then(function() {
                 return DcardAPI.getHot();
             })
             .then(function(hotArticle) {
@@ -286,9 +280,10 @@ const Spider = {
                     };
                     latestDAO.save(data);
                 }
+                return logger.info('Latest Save Complete !')
             })
             .catch(function(err) {
-                logger.error('get latest data error: ', err);
+                logger.error('Get Latest Data Error: ', err);
             });
     },
     // 評論數更新
@@ -302,28 +297,25 @@ const Spider = {
                     }
                     return cmtCountDAO.delete({ id: { $in: idsArr } })
                 } else {
-                    return Promise.reject('delete over')
+                    return Promise.reject('Delete Over')
                 }
             })
             .then(function() {
                 // logger.info('delete over @: ' + start);
-                const promiseArr = [];
                 while (idsArr.length) {
                     const id = idsArr.pop();
-                    promiseArr.push(Spider.cmtCount(id, start));
+                    Spider.cmtCount(id, start);
                 }
-                return Promise.all(promiseArr);
             })
             .then(function() {
-                const date = d(start).before();
-                if (date != end) {
-                    Spider.updateCmtCount(date, end)
+                const d = new DateCalc(start).before();
+                if (d != end) {
+                    Spider.updateCmtCount(d, end)
                 }
                 return Promise.resolve(start);
             })
             .catch(function(err) {
                 logger.error('CmtCount Update Error : ' + err);
-                return Promise.resolve(start);
             })
     },
     // 看板資訊更新
@@ -337,11 +329,11 @@ const Spider = {
                     }
                     return forumsDAO.delete({ forumsAlias: { $in: forumsAliasArr } })
                 } else {
-                    return Promise.resolve('Delete over')
+                    return Promise.resolve('Delete Over')
                 }
             })
             .then(function() {
-                logger.info('delete over! Start update forumsInfo');
+                logger.info('Delete Over! Start Update ForumsInfo');
                 Spider.forumsInfo();
             })
             .catch(function(err) {
@@ -356,7 +348,7 @@ const Spider = {
         const query = { id: { $in: idsArr } };
         return tmpDAO.search({ id: { $exists: true } })
             .then(function(d) {
-                if (d.length && d != null) {
+                if (d.length) {
                     for (let i = 0; i < d.length; i++) {
                         idsArr.push(d[i].id);
                         dArr.push({ id: d[i].id, time: d[i].time });
@@ -382,7 +374,7 @@ const Spider = {
                 return tagDAO.delete(query);
             })
             .then(function() {
-                logger.info('delete over @: ');
+                logger.info('Delete Over ');
                 const promiseArr = [];
                 while (dArr.length) {
                     const d = dArr.pop();
@@ -392,12 +384,12 @@ const Spider = {
                 return Promise.all(promiseArr);
             })
             .then(function() {
-                logger.info('dayRefresh Update Success @: ');
-                return Promise.resolve('dayRefresh Update Success @: ');
+                logger.info('DayRefresh Update Success ');
+                return Promise.resolve('DayRefresh Update Success ');
             })
             .catch(function(err) {
                 //tmpDAO.save({ id: '', time: time });
-                logger.error('dayRefresh Update Error : ' + err);
+                logger.error('DayRefresh Update Error : ' + err);
             })
     },
 };
