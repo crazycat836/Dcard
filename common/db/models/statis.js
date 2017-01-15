@@ -48,7 +48,7 @@ StatisDAO.prototype = {
                             type: data[i].type,
                             sum: data[i].sum,
                             count: data[i].count,
-                            aids: data[i].aids,
+                            ids: data[i].ids,
                             tags: data[i].tags,
                             gender: data[i].gender,
                             school: data[i].school,

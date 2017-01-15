@@ -41,7 +41,7 @@ CmtCountDAO.prototype = {
                 if (data) {
                     for (let i = 0, len = data.length; i < len; i++) {
                         const d = {
-                            aid: data[i].aid,
+                            id: data[i].id,
                             commentCount: data[i].commentCount,
                             likeCount: data[i].likeCount,
                             time: data[i].time,

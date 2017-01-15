@@ -43,7 +43,7 @@ CommentsDAO.prototype = {
                 if (data.length) {
                     for (let i = 0, len = data.length; i < len; i++) {
                         const d = {
-                            aid: data[i].aid,
+                            id: data[i].id,
                             comments: data[i].comments,
                             type: data[i].type
                         };
