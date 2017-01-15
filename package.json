@@ -1,14 +1,14 @@
 {
   "name": "dcard",
   "version": "0.0.1",
-  "description": "",
+  "description": "dcard spider",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/crazycat836/Dcard.git"
+    "url": "https://github.com/crazycat836/Dcard.git"
   },
   "keywords": [
     "dcard"
@@ -39,7 +39,6 @@
   "dependencies": {
     "babel-runtime": "^6.18.0",
     "body-parser": "^1.15.2",
-    "cheerio": "^0.22.0",
     "cookie-parser": "^1.4.3",
     "cron": "^1.2.1",
     "express": "^4.14.0",
