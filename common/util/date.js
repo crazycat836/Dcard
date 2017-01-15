@@ -28,8 +28,8 @@ DateCalc.prototype = {
         return this._calc(days || 1, 'after');
     },
     _calc: function(days, type) {
-        const d = new Date(this.date),
-            input = 0;
+        const d = new Date(this.date);
+        let input = 0;
         if (type === 'before') {
             input = 0 - this.bef;
             days = 0 - days;
