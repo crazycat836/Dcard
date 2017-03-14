@@ -28,12 +28,12 @@ const Task = {
         this.weekly();
         this.endDaily();
     },
-    // 07:00 - 22:00 每小時爬取一次最新熱門文章
+    // 02:00 - 22:00 每小時爬取一次最新熱門文章
     hourly: function() {
-        new CronJob('00 00 7-22 * * *', function() {
+        new CronJob('00 00 2-22 * * *', function() {
             Promise.resolve(Spider.latest())
                 .then(function() {
-                    logger.info('hourly cron-job over @time: ' + date.now());
+                    logger.info('hourly cron-job over');
                 })
                 .catch(function(err) {
                     logger.error('hourly cron-job err : ' + err);
