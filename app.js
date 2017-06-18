@@ -1,85 +1,29 @@
 "use strict";
-
 const fs = require('fs');
 const express = require('express');
+const app = express();
+const http = require('http').Server(app);
+const io = require('socket.io')(http);
 const path = require('path');
 const morgan = require('morgan');
-const FileStreamRotator = require('file-stream-rotator');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
-const CONFIG = require('./config/config');
 const routes = require('./common/routes');
+const Kafka = require('no-kafka');
 
-const app = express();
-/*
-// webpack
-if (CONFIG.fe.developing) {
-    var webpackConfig = require('./build/webpack.dev.conf');
-    var webpack = require('webpack');
-    var webpackDevMiddleware = require('webpack-dev-middleware');
-    var compiler = webpack(webpackConfig);
-    var devMiddleware = webpackDevMiddleware(compiler, {
-        publicPath: webpackConfig.output.publicPath,
-        stats: {
-            colors: true,
-            chunks: true,
-            progress: true
-        }
-    });
-    var hotMiddleware = require('webpack-hot-middleware')(compiler);
-    app.use(devMiddleware);
-    app.use(hotMiddleware);
-}
-*/
 // 爬蟲任務
-const Job = require('./common/util/task');
-Job.fire();
-
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
-
-//app.use(favicon(__dirname + '/public/favicon.ico'));
+ //const Job = require('./common/util/task');
+ //Job.fire();
+// 測試區
+//const Spider = require('./common/util/spider');
+//Spider.streamTag();
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-//app.use('/', routes);
-
-/// catch 404 and forwarding to error handler
-app.use(function(req, res, next) {
-    const err = new Error('Not Found');
-    err.status = 404;
-    // next(err);
-    res.render('error', {
-        message: err.message,
-        error: err
-    });
-});
-
-// development error handler
-// will print stacktrace
-if (app.get('env') === 'development') {
-    app.use(function(err, req, res, next) {
-        res.status(err.status || 500);
-        res.render('error', {
-            message: err.message,
-            error: err
-        });
-    });
-}
-
-// production error handler
-// no stacktraces leaked to user
-app.use(function(err, req, res, next) {
-    res.status(err.status || 500);
-    res.render('error', {
-        message: err.message,
-        error: {}
-    });
-});
+app.use('/', routes);
 
 // ============== log4js init ==============
 
@@ -102,10 +46,55 @@ log4js.configure({
 });
 app.use(log4js.connectLogger(log4js.getLogger('access'), { level: log4js.levels.INFO }));
 
+
+// ============== socket init ==============
+/*
+io.on('connection', function(socket){
+    console.log('a user connected');
+    socket.on('disconnect', function(){
+        console.log('user disconnected');
+    });
+});
+*/
+/*
+app.get('/', function(req, res){
+    res.sendFile('/public/index.html');
+});
+*/
 app.set('port', process.env.PORT || 9000);
-const server = app.listen(app.get('port'), function() {
-    //console.log('Express server listening on port ' + server.address().port);
+const Server = http.listen(app.get('port'), function() {
+    console.log('Express server listening on port ' + Server.address().port);
 });
 
 
+// ============== kafka consumer init ==============
+/*
+const consumer = new Kafka.SimpleConsumer();
+const NewMsg = [];
+// data handler function can return a Promise
+const dataHandler = function(messageSet, topic, partition) {
+    messageSet.forEach(function(m) {
+        const msg = JSON.parse(m.message.value.toString('utf8'));
+        //console.log(topic, partition, m.offset, msg);
+        const formatString = { name: msg[0], size: msg[1] };
+        //console.log("length of NewMsg: " + NewMsg.length);
+        if (NewMsg.length == 10) {
+            io.emit("message", JSON.stringify({ name: "flare", children: NewMsg }));
+            io.emit("domain",NewMsg);
+            //console.log("NewMsg: " + JSON.stringify(NewMsg));
+            NewMsg.length = 0;
+        } else {
+            NewMsg.push(formatString);
+        }
+    });
+
+};
+
+return consumer.init()
+    .then(function() {
+        // Subscribe partition 0 in a topic:
+        return consumer.subscribe('processed-data', 0, dataHandler);
+    });
+
+*/
 module.exports = app;

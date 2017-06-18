@@ -28,12 +28,15 @@ const Task = {
         this.weekly();
         this.endDaily();
     },
-    // 07:00 - 22:00 每小時爬取一次最新熱門文章
+    // 02:00 - 22:00 每小時爬取一次最新熱門文章
     hourly: function() {
-        new CronJob('00 00 7-22 * * *', function() {
+        new CronJob('00 13 2-22 * * *', function() {
             Promise.resolve(Spider.latest())
                 .then(function() {
-                    logger.info('hourly cron-job over @time: ' + date.now());
+                    Spider.streamTag();
+                })
+                .then(function() {
+                    logger.info('hourly cron-job over');
                 })
                 .catch(function(err) {
                     logger.error('hourly cron-job err : ' + err);
@@ -42,7 +45,7 @@ const Task = {
     },
     // 每天23:30 抓取當天所有文章
     daily: function() {
-        new CronJob('00 30 23 * * *', function() {
+        new CronJob('00 14 13 * * *', function() {
                 Promise.resolve(Spider.day())
                     .then(function() {
                         logger.info('daily cron-job over @date: ' + date.today());

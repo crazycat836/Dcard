@@ -31,8 +31,5 @@ module.exports = {
         fire: false,
         openTask: false,
         interval: 10
-    },
-    fe: {
-        developing: true
     }
 };
