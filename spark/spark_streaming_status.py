@@ -8,14 +8,15 @@ import sys
 import pprint
 
 def pushTagCountInKafka(top_ten_tags):
-    client = KafkaClient(hosts="localhost:9092")
+    client = KafkaClient(hosts="192.168.4.71:9092,192.168.4.72:9092,192.168.4.73:9092,192.168.4.74:9092,192.168.4.75:9092")
     topic = client.topics['processed-data']
     for tags in top_ten_tags:
 	    with topic.get_producer(linger_ms=100) as producer:
 		    producer.produce(json.dumps(tags).encode('utf-8'))
 
 
-zkQuorum, topic = sys.argv[1:]
+zkQuorum = '192.168.4.70:2181/dcos-service-kafka'
+topic = 'data'
 sc = SparkContext(appName="DcardTagCount")
 sc.setLogLevel("ERROR")
 ssc = StreamingContext(sc,10)
