@@ -1,31 +1,40 @@
+# -*- coding: utf-8 -*-
 from pyspark import SparkContext
 from pyspark.streaming import StreamingContext
 from pyspark.streaming.kafka import KafkaUtils
-from kafka import KafkaProducer
+from pykafka import KafkaClient
 import json
 import sys
 import pprint
 
+def pushTagCountInKafka(top_ten_tags):
+    client = KafkaClient(hosts="localhost:9092")
+    topic = client.topics['processed-data']
+    for tags in top_ten_tags:
+	    with topic.get_producer(linger_ms=100) as producer:
+		    producer.produce(json.dumps(tags).encode('utf-8'))
 
-
-def pushTagCountInKafka(tags_counts):
-    producer = KafkaProducer(bootstrap_servers='localhost:9092')
-    for tag in tags_counts:
-        tag_string = json.dumps(tag)
-        producer.send('one-min-data', tag_string.encode('utf-8'))
 
 zkQuorum, topic = sys.argv[1:]
 sc = SparkContext(appName="DcardTagCount")
 sc.setLogLevel("ERROR")
-ssc = StreamingContext(sc, 120)
+ssc = StreamingContext(sc,10)
 kvs = KafkaUtils.createStream(ssc, zkQuorum, "spark-streaming-consumer", {topic: 1})
 lines = kvs.map(lambda x: x[1])
-lines.pprint()
+
+lines.count().map(lambda x:'Process in this batch: %s' % x).pprint()
+
 tags_count = lines.flatMap(lambda line: line.split(","))\
              .map(lambda tag_status: (tag_status, 1)) \
               .reduceByKey(lambda a, b: a+b)
-tags_count.pprint()
 
-tags_count.foreachRDD(lambda rdd: rdd.foreachPartition(pushTagCountInKafka))
+sort_tag = tags_count.transform((lambda foo:foo.sortBy(lambda x:( -x[1]))))
+
+top_ten_tags = sort_tag.transform(lambda rdd:sc.parallelize(rdd.take(10)))
+
+top_ten_tags.pprint()
+
+top_ten_tags.foreachRDD(lambda rdd: rdd.foreachPartition(pushTagCountInKafka))
+
 ssc.start()
 ssc.awaitTermination()
