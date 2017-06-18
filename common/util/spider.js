@@ -11,6 +11,7 @@ const TagDAO = require('../db/models/tag');
 
 const DcardAPI = require('../api/api');
 
+const Producer = require('./producer');
 const DateCalc = require('./date');
 const date = new DateCalc();
 
@@ -391,6 +392,69 @@ const Spider = {
                 //tmpDAO.save({ id: '', time: time });
                 logger.error('DayRefresh Update Error : ' + err);
             })
+    },
+    // 將資料傳進 kafka
+    kafkaTag: function(id) {
+        return DcardAPI.getTag(id)
+            .then(function(d) {
+                const data = {
+                    id: d.id,
+                    tags: d.tags
+                };
+                //console.log("id: "+data.id+" tags: "+data.tags);
+                return Promise.resolve(data.tags)
+            })
+            .then(function(d) {
+                if(d.length)
+                {Producer.Stream(d);}
+            })
+            .catch(function() {
+                logger.error('Kafka Tags Error @id: ' + id);
+            });
+    },
+    // 以熱門文章抓取 tag
+    streamTag: function() {
+        return DcardAPI.getHot()
+            .then(function(hotArticle) {
+                const d = hotArticle,
+                    lid = d[d.length - 1].id,
+                    length = d.length;
+                for (let i = 0, len = length; i < len; i++) {
+                    const data = {
+                        id: d[i].id,
+                    };
+                    Spider.kafkaTag(data.id);
+                }
+                return Promise.resolve(lid);
+            })
+            .then(function(d) {
+               Spider.tagFire(d);
+            })
+            .catch(function(err) {
+                logger.error('Get Latest List Data Error: ', err);
+            });
+    },
+    tagFire: function(articleId) {
+        return DcardAPI.getAllArticle(articleId)
+            .then(function(articleAll) {
+                const d = articleAll,
+                    lid = d[d.length - 1].id,
+                    length = d.length;
+                for (let i = 0, len = length; i < len; i++) {
+                    const data = {
+                        id: d[i].id,
+                    };
+                    Spider.kafkaTag(data.id);
+                }
+                return Promise.resolve({ lid: lid, length: length });
+            })
+            .then(function(d) {
+                if (d.length == 30) {
+                    Spider.tagFire(d.lid);
+                } else {
+                    return Promise.resolve(logger.info('Tag Save Complete !'));
+                }
+            });
     },
 };
 module.exports = Spider;

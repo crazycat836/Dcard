@@ -5,7 +5,7 @@ const tagProducer = {
     Stream: function(d) {
         return producer.init().then(function() {
             return producer.send({
-                topic: 'test',
+                topic: 'data',
                 partition: 0,
                 message: {
                     value: d
